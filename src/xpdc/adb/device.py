@@ -1,0 +1,53 @@
+import base64
+
+from .._base import DeviceBase
+from ..utils import exec_cmd
+
+
+class ADBDevice(DeviceBase):
+    def __init__(self, *, device_id: str, adb: str):
+        self.device_id = device_id
+        self._adb = adb
+
+    def cmd(self, cmd: list[str], *, timeout: int = 10) -> str:
+        cmd = [self._adb, '-s', self.device_id] + cmd
+        return exec_cmd(cmd, timeout=timeout)
+
+    def shell(self, cmd: list[str], *, timeout: int = 10) -> str:
+        cmd = [self._adb, '-s', self.device_id, 'shell'] + cmd
+        return exec_cmd(cmd, timeout=timeout)
+
+    def tap(self, x: int, y: int) -> str:
+        return self.shell(['input', 'tap', str(x), str(y)])
+
+    def double_tap(self, x: int, y: int) -> str:
+        self.shell(['input', 'tap', str(x), str(y)])
+        return self.shell(['input', 'tap', str(x), str(y)])
+
+    def long_press(self, x: int, y: int, *, duration_ms: int = 3000) -> str:
+        return self.shell(['input', 'swipe', str(x), str(y), str(x), str(y), str(duration_ms)])
+
+    def swipe(self, start_x: int, start_y: int, end_x: int, end_y: int, *, duration_ms: int = None) -> str:
+        if duration_ms is None:
+            dist_sq = (start_x - end_x) ** 2 + (start_y - end_y) ** 2
+            duration_ms = int(dist_sq / 1000)
+            duration_ms = max(1000, min(duration_ms, 2000))  # Clamp between 1000-2000ms
+
+        return self.shell(['input', 'swipe', str(start_x), str(start_y), str(end_x), str(end_y), str(duration_ms)])
+
+    def back(self) -> str:
+        return self.shell(['input', 'keyevent', 'KEYCODE_BACK'])
+
+    def home(self) -> str:
+        return self.shell(['input', 'keyevent', 'KEYCODE_HOME'])
+
+    def launch_app(self, bundle: str, ability: str = None) -> str:
+        return self.shell(['monkey', '-p', bundle, '-c', 'android.intent.category.LAUNCHER', '1'])
+
+    def type_text(self, text: str) -> str:
+        encoded_text = base64.b64encode(text.encode('utf-8')).decode('utf-8')
+
+        return self.shell(['am', 'broadcast', '-a', 'ADB_INPUT_B64', '--es', 'msg', encoded_text])
+
+    def clear_text(self) -> str:
+        return self.shell(['am', 'broadcast', '-a', 'ADB_CLEAR_TEXT'])
