@@ -1,6 +1,11 @@
 import base64
+import subprocess
+import time
+
+from loguru import logger
 
 from .._base import DeviceBase
+from ..resource import ADB_KEYBOARD_APK
 from ..utils import exec_cmd
 
 
@@ -51,3 +56,24 @@ class ADBDevice(DeviceBase):
 
     def clear_text(self) -> str:
         return self.shell(['am', 'broadcast', '-a', 'ADB_CLEAR_TEXT'])
+
+    def install_and_set_adb_keyboard(self) -> str:
+        # Get current IME
+        out = self.shell(['settings', 'get', 'secure', 'default_input_method'])
+
+        if 'com.android.adbkeyboard/.AdbIME' in out:
+            return out
+
+        # Check weather ADBKeyboard.apk installed
+        try:
+            self.shell(['pm', 'path', 'com.android.adbkeyboard'])
+        except subprocess.CalledProcessError:
+            logger.info('ADBKeyboard.apk is not installed, try to install it')
+            self.cmd(['install', str(ADB_KEYBOARD_APK)])
+            time.sleep(0.1)
+
+        logger.info('Enable input method [com.android.adbkeyboard]')
+        self.shell(['ime', 'enable', 'com.android.adbkeyboard/.AdbIME'])
+
+        logger.info('Set default input method to [com.android.adbkeyboard]')
+        return self.shell(['ime', 'set', 'com.android.adbkeyboard/.AdbIME'])
