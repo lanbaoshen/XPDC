@@ -5,6 +5,7 @@ description = "XPDC (X-Platform Device Connector) is designed to bridge the gap 
 requires-python = ">=3.11"
 dependencies = [
     "loguru>=0.7.3",
+    "pillow>=12.1.0",
 ]
 
 [dependency-groups]
