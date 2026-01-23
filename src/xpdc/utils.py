@@ -1,5 +1,6 @@
 import platform
 import subprocess
+from datetime import datetime
 from tempfile import SpooledTemporaryFile
 
 from loguru import logger
@@ -54,3 +55,7 @@ def exec_cmd(
             return temp.read().decode('utf-8').strip() or ''
 
     return proc.stdout.strip() or ''
+
+
+def now_str() -> str:
+    return datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')

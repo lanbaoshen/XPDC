@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+from pathlib import Path
+
+from xpdc.screenshot import Screenshot
 
 
 class DeviceBase(ABC):
@@ -44,4 +47,8 @@ class DeviceBase(ABC):
 
     @abstractmethod
     def clear_text(self) -> str:
+        pass
+
+    @abstractmethod
+    def screenshot(self, path: Path = None) -> Screenshot:
         pass

@@ -1,12 +1,14 @@
 import base64
 import subprocess
 import time
+from pathlib import Path
 
 from loguru import logger
 
 from .._base import DeviceBase
 from ..resource import ADB_KEYBOARD_APK
-from ..utils import exec_cmd
+from ..screenshot import Screenshot
+from ..utils import exec_cmd, now_str
 
 
 class ADBDevice(DeviceBase):
@@ -77,3 +79,16 @@ class ADBDevice(DeviceBase):
 
         logger.info('Set default input method to [com.android.adbkeyboard]')
         return self.shell(['ime', 'set', 'com.android.adbkeyboard/.AdbIME'])
+
+    def screenshot(self, path: Path = None) -> Screenshot:
+        path = path or Path(f'adb-{self.device_id}-{now_str()}.png')
+
+        with open(path, 'wb') as f:
+            subprocess.run(  # noqa: S603
+                [self._adb, '-s', self.device_id, 'shell', 'screencap', '-p'],
+                stdout=f,
+                check=True,
+                timeout=30,
+            )
+
+        return Screenshot(path)

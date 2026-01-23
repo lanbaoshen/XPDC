@@ -1,5 +1,8 @@
+from pathlib import Path, PurePath
+
 from .._base import DeviceBase
-from ..utils import exec_cmd
+from ..screenshot import Screenshot
+from ..utils import exec_cmd, now_str
 
 
 class HDCDevice(DeviceBase):
@@ -51,3 +54,12 @@ class HDCDevice(DeviceBase):
         self.shell(['uitest', 'uiInput', 'keyEvent', '2072', '2017'])
         # Delete
         return self.shell(['uitest', 'uiInput', 'keyEvent', '2055'])
+
+    def screenshot(self, path: Path = None) -> Screenshot:
+        remote_path = PurePath('/data/local/tmp/tmp_screenshot.jpeg')
+        path = path or Path(f'hdc-{self.device_id}-{now_str()}.png')
+
+        self.shell(['snapshot_display', '-f', remote_path])
+        self.cmd(['file', 'recv', remote_path, path])
+
+        return Screenshot(path)
