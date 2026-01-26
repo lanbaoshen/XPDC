@@ -1,3 +1,4 @@
+import re
 from pathlib import Path, PurePath
 
 from .._base import DeviceBase
@@ -63,3 +64,23 @@ class HDCDevice(DeviceBase):
         self.cmd(['file', 'recv', remote_path, path])
 
         return Screenshot(path)
+
+    def get_current_app(self) -> str:
+        out = self.shell(['aa', 'dump', '-l'])
+
+        foreground_bundle = current_bundle = None
+
+        for line in out.split('\n'):
+            if 'app name [' in line:
+                if match := re.search(r'\[([^]]+)]', line):
+                    current_bundle = match.group(1)
+
+            if 'state #foreground' in line.lower():
+                if current_bundle:
+                    foreground_bundle = current_bundle
+                    break
+
+            if 'Mission ID' in line:
+                current_bundle = None
+
+        return foreground_bundle or ''

@@ -1,4 +1,5 @@
 import base64
+import re
 import subprocess
 import time
 from pathlib import Path
@@ -92,3 +93,14 @@ class ADBDevice(DeviceBase):
             )
 
         return Screenshot(path)
+
+    def get_current_app(self) -> str:
+        out = self.shell(['dumpsys', 'window'])
+
+        re_current = re.compile(r'mCurrentFocus=Window\{\S+\s+\S+\s+(?P<bundle>[^\s/]+)/(?P<ability>[^\s}]+)}')
+        re_focused = re.compile(r'mFocusedApp=ActivityRecord\{\S+\s+\S+\s+(?P<bundle>[^\s/]+)/(?P<ability>[^\s}]+)')
+
+        if m := (re_current.search(out) or re_focused.search(out)):
+            return m['bundle']
+
+        return ''

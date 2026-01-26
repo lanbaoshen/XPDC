@@ -1,6 +1,6 @@
 [project]
 name = "xpdc"
-version = "0.1.0"
+version = "0.1.1"
 description = "XPDC (X-Platform Device Connector) is designed to bridge the gap between devices across multiple platforms (Android, HarmonyOS, iOS)."
 requires-python = ">=3.11"
 dependencies = [

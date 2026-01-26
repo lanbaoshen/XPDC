@@ -52,3 +52,7 @@ class DeviceBase(ABC):
     @abstractmethod
     def screenshot(self, path: Path = None) -> Screenshot:
         pass
+
+    @abstractmethod
+    def get_current_app(self) -> str:
+        pass
