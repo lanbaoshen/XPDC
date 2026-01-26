@@ -7,7 +7,7 @@ from .hdc import HDCConnection
 class DeviceType(StrEnum):
     ADB = 'adb'
     HDC = 'hdc'
-    IOS = 'IOS'
+    IOS = 'ios'
 
 
 def connection(device_type: DeviceType) -> ADBConnection | HDCConnection:

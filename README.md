@@ -6,7 +6,7 @@
 
 # Introduction
 
-XPDC (X-Platform Device Connector) is designed to bridge the gap between devices across multiple platforms (Android, HarmonyOS, IOS).
+XPDC (X-Platform Device Connector) is designed to bridge the gap between devices across multiple platforms (Android, HarmonyOS, iOS).
 
 It allows users to operate devices on different platforms with the same set of code.
 
@@ -35,7 +35,7 @@ from xpdc import connection, DeviceType
 # Specify connect device type
 conn = connection(DeviceType.ADB)
 # conn = connection(DeviceType.HDC)
-# IOS will support it in the future.
+# iOS will support it in the future.
 
 conn.cmd(['devices'])
 
