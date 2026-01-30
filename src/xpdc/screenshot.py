@@ -6,8 +6,7 @@ from PIL import Image
 from PIL.ImageFile import ImageFile
 
 
-# https://lanbaoshen.github.io/blog/2025/10/13/subclassing-of-pathlibpath/#solution
-class Screenshot(type(Path()), Path):
+class Screenshot(Path):
     def __init__(self, *args):
         super().__init__(*args)
 

@@ -31,7 +31,7 @@ class HDCConnection(ConnectionBase):
         devices = []
 
         for line in out.split('\n'):
-            if not line.strip():
+            if not line.strip() or line.strip() == '[Empty]':
                 continue
 
             devices.append(HDCDevice(device_id=line.split()[0], hdc=self._hdc))
