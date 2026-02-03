@@ -38,5 +38,5 @@ class ADBConnection(ConnectionBase):
 
         return devices
 
-    def device(self, device_id: str = None) -> 'ADBDevice':
+    def device(self, device_id: str) -> 'ADBDevice':
         return ADBDevice(device_id=device_id, adb=self._adb)
