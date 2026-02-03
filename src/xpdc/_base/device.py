@@ -42,6 +42,10 @@ class DeviceBase(ABC):
         pass
 
     @abstractmethod
+    def stop_app(self, bundle: str) -> str:
+        pass
+
+    @abstractmethod
     def type_text(self, text: str) -> str:
         pass
 

@@ -47,6 +47,9 @@ class HDCDevice(DeviceBase):
     def launch_app(self, bundle: str, ability: str = 'EntryAbility') -> str:
         return self.shell(['aa', 'start', '-b', bundle, '-a', ability])
 
+    def stop_app(self, bundle: str) -> str:
+        return self.shell(['aa', 'force-stop', bundle])
+
     def type_text(self, text: str) -> str:
         return self.shell(['uitest', 'uiInput', 'text', text])
 

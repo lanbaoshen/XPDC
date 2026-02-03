@@ -52,6 +52,9 @@ class ADBDevice(DeviceBase):
     def launch_app(self, bundle: str, ability: str = None) -> str:
         return self.shell(['monkey', '-p', bundle, '-c', 'android.intent.category.LAUNCHER', '1'])
 
+    def stop_app(self, bundle: str) -> str:
+        return self.shell(['am', 'force-stop', bundle])
+
     def type_text(self, text: str) -> str:
         encoded_text = base64.b64encode(text.encode('utf-8')).decode('utf-8')
 
