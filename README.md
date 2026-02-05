@@ -2,8 +2,6 @@
     <img src="logo.png" alt="pyecharts logo" width=200 />
 </p>
 
----
-
 # Introduction
 
 XPDC (X-Platform Device Connector) is designed to bridge the gap between devices across multiple platforms (Android, HarmonyOS, iOS).
