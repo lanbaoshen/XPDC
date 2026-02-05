@@ -60,3 +60,11 @@ class DeviceBase(ABC):
     @abstractmethod
     def get_current_app(self) -> str:
         pass
+
+    @abstractmethod
+    def dump_bundles(self) -> str:
+        pass
+
+    @abstractmethod
+    def dump_bundle(self, bundle: str, *, shortcut: bool = False) -> str:
+        pass

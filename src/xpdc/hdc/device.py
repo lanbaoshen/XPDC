@@ -87,3 +87,13 @@ class HDCDevice(DeviceBase):
                 current_bundle = None
 
         return foreground_bundle or ''
+
+    def dump_bundles(self) -> str:
+        return self.shell(['bm', 'dump', '-a'])
+
+    def dump_bundle(self, bundle: str, *, shortcut: bool = False) -> str:
+        cmd = ['bm', 'dump', '-n', bundle]
+        if shortcut:
+            cmd.append('-s')
+
+        return self.shell(cmd)

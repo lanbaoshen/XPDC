@@ -87,13 +87,11 @@ class ADBDevice(DeviceBase):
     def screenshot(self, path: Path = None) -> Screenshot:
         path = path or Path(f'adb-{self.device_id}-{now_str()}.png')
 
+        cmd = [self._adb, '-s', self.device_id, 'shell', 'screencap', '-p']
+        logger.debug(f'Executing command: {cmd}')
+
         with open(path, 'wb') as f:
-            subprocess.run(  # noqa: S603
-                [self._adb, '-s', self.device_id, 'shell', 'screencap', '-p'],
-                stdout=f,
-                check=True,
-                timeout=30,
-            )
+            subprocess.run(cmd, stdout=f, check=True, timeout=30)  # noqa: S603
 
         return Screenshot(path)
 
@@ -107,3 +105,11 @@ class ADBDevice(DeviceBase):
             return m['bundle']
 
         return ''
+
+    def dump_bundles(self) -> str:
+        return self.shell(['pm', 'list', 'packages'])
+
+    def dump_bundle(self, bundle: str, *, shortcut: bool = False) -> str:
+        cmd = ['dumpsys', 'package', '--checkin', bundle] if shortcut else ['dumpsys', 'package', bundle]
+
+        return self.shell(cmd)
