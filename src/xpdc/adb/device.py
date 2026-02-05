@@ -113,3 +113,9 @@ class ADBDevice(DeviceBase):
         cmd = ['dumpsys', 'package', '--checkin', bundle] if shortcut else ['dumpsys', 'package', bundle]
 
         return self.shell(cmd)
+
+    def clean_cache(self, bundle: str) -> str:
+        return self.shell(['pm', 'clear', '--cache-only', bundle])
+
+    def clean_data(self, bundle: str) -> str:
+        return self.shell(['pm', 'clear', bundle])

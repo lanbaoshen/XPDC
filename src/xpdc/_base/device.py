@@ -68,3 +68,11 @@ class DeviceBase(ABC):
     @abstractmethod
     def dump_bundle(self, bundle: str, *, shortcut: bool = False) -> str:
         pass
+
+    @abstractmethod
+    def clean_cache(self, bundle: str) -> str:
+        pass
+
+    @abstractmethod
+    def clean_data(self, bundle: str) -> str:
+        pass

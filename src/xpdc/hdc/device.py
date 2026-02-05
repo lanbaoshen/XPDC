@@ -97,3 +97,9 @@ class HDCDevice(DeviceBase):
             cmd.append('-s')
 
         return self.shell(cmd)
+
+    def clean_cache(self, bundle: str) -> str:
+        return self.shell(['bm', 'clean', '-c', '-n', bundle])
+
+    def clean_data(self, bundle: str) -> str:
+        return self.shell(['bm', 'clean', '-d', '-n', bundle])
